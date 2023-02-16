@@ -1,0 +1,158 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Category {
+  id             Int                    @id @default(autoincrement())
+  created_at     DateTime               @default(now())
+  updated_at     DateTime               @updatedAt
+  name           String?
+  catalogue_id   Int?
+  product        CategoriesOnProducts[]
+  Catalogue      Catalogue?             @relation(fields: [catalogue_id], references: [id])
+  sub_categories SubCategory[]
+}
+
+model SubCategory {
+  id          Int       @id @default(autoincrement())
+  name        String?
+  category_id Int
+  category    Category  @relation(fields: [category_id], references: [id])
+  product     Product[] @relation("ProductToSubCategory")
+}
+
+model Order {
+  id         Int      @id @default(autoincrement())
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  product_id Int
+  product    Product  @relation(fields: [product_id], references: [id])
+}
+
+model Basket {
+  id         Int       @id @default(autoincrement())
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  products   Product[] @relation("BasketToProduct")
+}
+
+model Color {
+  id                    Int                   @id @default(autoincrement())
+  created_at            DateTime?             @default(now())
+  updated_at            DateTime?             @updatedAt
+  name                  String
+  value                 String
+  product_color_variant ProductColorVariant[]
+}
+
+model Discount {
+  id                        Int      @id @default(autoincrement())
+  created_at                DateTime @default(now())
+  updated_at                DateTime @updatedAt
+  discount_valid            Boolean
+  discount_valid_until      DateTime @default(now())
+  discount_percentage_value String
+  discount_amount_value     String
+  discounted_product_value  String
+  discount_type             String
+  product_id                Int
+  product                   Product  @relation(fields: [product_id], references: [id])
+}
+
+model Product {
+  id              Int                    @id @default(autoincrement())
+  created_at      DateTime               @default(now())
+  updated_at      DateTime               @updatedAt
+  name            String
+  description     String?
+  manufacturer    String?
+  image           String?
+  currency        String                 @default("BAM")
+  size            String
+  price           String
+  catalogue_id    Int?
+  location_id     Int?
+  categories      CategoriesOnProducts[]
+  discounts       Discount[]
+  orders          Order[]
+  catalogue       Catalogue?             @relation(fields: [catalogue_id], references: [id])
+  related_product RelatedProduct?        @relation("RelatedProduct")
+  variants        Variant[]
+  baskets         Basket[]               @relation("BasketToProduct")
+  locations       Location[]             @relation("LocationToProduct")
+  sub_categories  SubCategory[]          @relation("ProductToSubCategory")
+}
+
+model CategoriesOnProducts {
+  id          Int       @id @default(autoincrement())
+  product_id  Int?
+  category_id Int?
+  assigned_at DateTime  @default(now())
+  assigned_by String
+  category    Category? @relation(fields: [category_id], references: [id])
+  product     Product?  @relation(fields: [product_id], references: [id])
+}
+
+model RelatedProduct {
+  related_product_id Int     @id
+  related_product    Product @relation("RelatedProduct", fields: [related_product_id], references: [id])
+}
+
+model Variant {
+  id                     Int                   @id @default(autoincrement())
+  product_id             Int
+  name                   String
+  available              Boolean               @default(false)
+  quantity               Int                   @default(0)
+  product_color_variants ProductColorVariant[]
+  product                Product               @relation(fields: [product_id], references: [id])
+}
+
+model ProductColorVariant {
+  id         Int      @id @default(autoincrement())
+  variant_id Int?
+  name       String
+  image      String?
+  colorId    Int?
+  color      Color?   @relation(fields: [colorId], references: [id])
+  variant    Variant? @relation(fields: [variant_id], references: [id])
+}
+
+model Catalogue {
+  id         Int        @id @default(autoincrement())
+  name       String
+  image      String
+  type       String
+  categories Category[]
+  products   Product[]
+}
+
+model Tag {
+  id         Int      @id @default(autoincrement())
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  name       String
+  color      String
+}
+
+model User {
+  id    Int    @id @default(autoincrement())
+  email String @unique
+  name  String
+}
+
+model Location {
+  id         Int       @id @default(autoincrement())
+  name       String
+  address1   String
+  address2   String?
+  city       String
+  country    String
+  zip_number String
+  products   Product[] @relation("LocationToProduct")
+}
