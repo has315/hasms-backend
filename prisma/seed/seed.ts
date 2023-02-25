@@ -130,18 +130,15 @@ async function main() {
         data: {
             name: "XMAX 300 2022",
             description: "",
-            price: '1410000',
+            price: 14100.00,
             currency: "BAM",
-            image: 'images/xmax300',
+            image: 'http:localhost:8000/images/xmax300.jpg',
             manufacturer: "YAMAHA",
             size: 'XS',
-            categories: {
-                connect: []
-            },
             variants: {
                 create:
                     [{
-                        name: 'red/gray',
+                        name: 'xmax300 red/gray',
                         product_color_variants: {
                             create: [
                                 {
@@ -149,73 +146,63 @@ async function main() {
                                     color: { create: { name: 'red/gray', value: '#f1f1f1' } },
                                 }
                             ]
-                        },
-                        available: true,
-                        quantity: 1,
+                        }
                     }]
             },
-            locations: {
-                create:
-                    [{
-                        name: 'Servis',
-                        address1: "Njegoševa 34a",
-                        address2: "",
-                        city: "Banja Luka",
-                        country: "Republic of Srpska/ Bosnia and Herzegovina",
-                        zip_number: "78000",
-                    }]
-            }
-
+            category: { connect: { id: 1 } }
         }
     })
     const Yam380s = await prisma.product.create({
         data: {
             name: "YAM 380 S",
             description: "",
-            price: '31600',
+            price: 31600,
             currency: "BAM",
-            image: 'images/tmax',
+            image: 'http:localhost:8000/images/tmax.jpg',
             manufacturer: "YAMAHA",
             size: 'XS',
             variants: {
-                connect:
+                create:
                     [{
-                        id: 1
+                        name: 'YAM 380 S red/gray',
+                        product_color_variants: {
+                            create: [
+                                {
+                                    name: '',
+                                    color: { create: { name: 'red/gray', value: '#f1f1f1' } },
+                                }
+                            ]
+                        }
                     }]
             },
-            locations: {
-                connect:
-                    [{
-                        id: 1,
-                    }]
-
-            }
-
+            category: { connect: { id: 3 } },
+            sub_category: { connect: { id: 1 } }
         }
     })
     const TmaxTechMax = await prisma.product.create({
         data: {
             name: "Tmax Tech Max",
             description: "",
-            price: '31600',
+            price: 31600,
             currency: "BAM",
-            image: 'images/tmax',
+            image: 'http:localhost:8000/images/tmax.jpg',
             manufacturer: "YAMAHA",
             size: 'XS',
             variants: {
-                connect:
+                create:
                     [{
-                        id: 1
+                        name: 'Tmax Tech Max red/gray',
+                        product_color_variants: {
+                            create: [
+                                {
+                                    name: '',
+                                    color: { create: { name: 'red/gray', value: '#f1f1f1' } },
+                                }
+                            ]
+                        }
                     }]
             },
-            locations: {
-                connect:
-                    [{
-                        id: 1,
-                    }]
-
-            }
-
+            category: { connect: { id: 1 } }
         }
     })
 
