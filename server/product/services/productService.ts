@@ -8,12 +8,33 @@ const getSingleProduct = async (productId: number | string) => {
                 equals: Number(productId)
             }
         },
+        include: {
+            category: true,
+            sizes: true,
+            variants: {
+                include: {
+                    colors: true
+                }
+            },
+        }
     })
     return product
 }
 
 const getAllProducts = async () => {
-    const products = await prisma.product.findMany()
+    const products = await prisma.product.findMany(
+        {
+            include: {
+                category: true,
+                variants: {
+                    include: {
+                        colors: true
+                    }
+                },
+                sizes: true
+            }
+        }
+    )
     return products
 }
 

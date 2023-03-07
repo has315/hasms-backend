@@ -19,11 +19,30 @@ const getSingleProduct = (productId) => __awaiter(void 0, void 0, void 0, functi
                 equals: Number(productId)
             }
         },
+        include: {
+            category: true,
+            sizes: true,
+            variants: {
+                include: {
+                    colors: true
+                }
+            },
+        }
     });
     return product;
 });
 const getAllProducts = () => __awaiter(void 0, void 0, void 0, function* () {
-    const products = yield prisma.product.findMany();
+    const products = yield prisma.product.findMany({
+        include: {
+            category: true,
+            variants: {
+                include: {
+                    colors: true
+                }
+            },
+            sizes: true
+        }
+    });
     return products;
 });
 const createProduct = (product) => __awaiter(void 0, void 0, void 0, function* () {

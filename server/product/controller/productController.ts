@@ -19,6 +19,7 @@ const getAllProducts = async (req: Request, res: Response) => {
     try {
         const result = await productService.getAllProducts();
         res.json(result);
+
     } catch (err) {
         console.log(err)
         res.json({ message: `err happened ` });

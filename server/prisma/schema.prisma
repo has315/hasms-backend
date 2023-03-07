@@ -48,12 +48,13 @@ model Basket {
 }
 
 model Color {
-  id                  Int                   @id @default(autoincrement())
-  created_at          DateTime?             @default(now())
-  updated_at          DateTime?             @updatedAt
-  name                String
-  value               String
-  ProductColorVariant ProductColorVariant[]
+  id         Int       @id @default(autoincrement())
+  created_at DateTime? @default(now())
+  updated_at DateTime? @updatedAt
+  name       String
+  value      String
+  variant_id Int
+  variant    Variant   @relation(fields: [variant_id], references: [id])
 
   @@schema("hasms_product")
 }
@@ -72,6 +73,19 @@ model Discount {
   @@schema("hasms_discount")
 }
 
+model Size {
+  id           Int       @id @default(autoincrement())
+  created_at   DateTime? @default(now())
+  updated_at   DateTime? @updatedAt
+  name         String
+  value        String
+  Product      Product[]
+  product_id   Int?
+  is_available Boolean?  @default(false)
+
+  @@schema("hasms_product")
+}
+
 model Product {
   id               Int                @id @default(autoincrement())
   created_at       DateTime           @default(now())
@@ -81,7 +95,6 @@ model Product {
   manufacturer     String?
   image            String?
   currency         String             @default("BAM")
-  size             String
   price            Float
   category_id      Int?
   sub_category_id  Int?
@@ -90,6 +103,7 @@ model Product {
   related_product  RelatedProduct?    @relation("RelatedProduct")
   variants         Variant[]
   ProductInventory ProductInventory[]
+  sizes            Size[]
 
   @@index([name, category_id, sub_category_id])
   @@schema("hasms_product")
@@ -103,11 +117,12 @@ model RelatedProduct {
 }
 
 model Variant {
-  id                     Int                   @id @default(autoincrement())
-  product_id             Int
-  name                   String
-  product_color_variants ProductColorVariant[]
-  product                Product               @relation(fields: [product_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  id         Int     @id @default(autoincrement())
+  product_id Int
+  name       String
+  product    Product @relation(fields: [product_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  image      String?
+  colors     Color[]
 
   @@schema("hasms_product")
 }
@@ -124,23 +139,11 @@ model ProductInventory {
   @@schema("hasms_inventory")
 }
 
-model ProductColorVariant {
-  id         Int      @id @default(autoincrement())
-  variant_id Int?
-  name       String
-  image      String?
-  color_id    Int?
-  color      Color?   @relation(fields: [color_id], references: [id])
-  variant    Variant? @relation(fields: [variant_id], references: [id])
-
-  @@schema("hasms_product")
-}
-
 model Catalogue {
   id    Int    @id @default(autoincrement())
   name  String
   image String
-  type  String
+  type  String @default("catalogue")
 
   @@schema("hasms_catalogue")
 }

@@ -134,20 +134,15 @@ async function main() {
             currency: "BAM",
             image: 'http:localhost:8000/images/xmax300.jpg',
             manufacturer: "YAMAHA",
-            size: 'XS',
+            sizes: {
+                create: [{ name: 'S', value: 's', is_available: true, }, { name: 'XL', value: 'xl' }],
+            },
             variants: {
                 create:
-                    [{
-                        name: 'xmax300 red/gray',
-                        product_color_variants: {
-                            create: [
-                                {
-                                    name: '',
-                                    color: { create: { name: 'red/gray', value: '#f1f1f1' } },
-                                }
-                            ]
-                        }
-                    }]
+                {
+                    name: 'xmax300 red/gray',
+                    colors: { create: [{ name: 'red/gray', value: '#f1f1f1' }, { name: 'red', value: '#FF0000' }] },
+                }
             },
             category: { connect: { id: 1 } }
         }
@@ -160,16 +155,17 @@ async function main() {
             currency: "BAM",
             image: 'http:localhost:8000/images/tmax.jpg',
             manufacturer: "YAMAHA",
-            size: 'XS',
+            sizes: {
+                connect: { id: 1 }
+            },
             variants: {
                 create:
                     [{
                         name: 'YAM 380 S red/gray',
-                        product_color_variants: {
-                            create: [
+                        colors: {
+                            connect: [
                                 {
-                                    name: '',
-                                    color: { create: { name: 'red/gray', value: '#f1f1f1' } },
+                                    id: 1,
                                 }
                             ]
                         }
@@ -187,16 +183,17 @@ async function main() {
             currency: "BAM",
             image: 'http:localhost:8000/images/tmax.jpg',
             manufacturer: "YAMAHA",
-            size: 'XS',
+            sizes: {
+                connect: { id: 1 }
+            },
             variants: {
                 create:
                     [{
-                        name: 'Tmax Tech Max red/gray',
-                        product_color_variants: {
-                            create: [
+                        name: 'Tmax tech max red/gray',
+                        colors: {
+                            connect: [
                                 {
-                                    name: '',
-                                    color: { create: { name: 'red/gray', value: '#f1f1f1' } },
+                                    id: 1,
                                 }
                             ]
                         }
